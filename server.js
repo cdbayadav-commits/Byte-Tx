@@ -3,6 +3,8 @@ import Database from 'better-sqlite3';
 import cors from 'cors';
 import axios from 'axios';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import { randomBytes } from 'crypto';
 
 dotenv.config();
