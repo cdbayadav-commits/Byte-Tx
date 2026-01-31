@@ -164,7 +164,7 @@ const Dashboard = () => {
                       <button 
                         onClick={() => {
                             localStorage.removeItem('byte_tx_user');
-                            window.location.href = 'http://localhost:3000/auth/discord';
+                            window.location.href = '/auth/discord';
                         }}
                         style={{
                             marginTop: '15px',

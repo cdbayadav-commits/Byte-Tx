@@ -155,7 +155,16 @@ app.get('/api/stats', (req, res) => {
   res.json({ totalUsers: count.count });
 });
 
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// Serve React Frontend (Production)
+const __dirname = dirname(fileURLToPath(import.meta.url));
+app.use(express.static(join(__dirname, 'dist')));
+
+// SPA Fallback (Must be last)
+app.get('*', (req, res) => {
+  res.sendFile(join(__dirname, 'dist', 'index.html'));
+});
+
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
 });

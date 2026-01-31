@@ -56,7 +56,7 @@ const ComingSoonCard = () => {
             ) : (
                 <button 
                     className="discord-btn"
-                    onClick={() => window.location.href = 'http://localhost:3000/auth/discord'}
+                    onClick={() => window.location.href = '/auth/discord'}
                 >
                     <span className="discord-icon">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
