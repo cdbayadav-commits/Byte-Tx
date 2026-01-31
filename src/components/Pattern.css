@@ -1,0 +1,16 @@
+.pattern-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0; /* Base background layer */
+  pointer-events: none; /* Allow clicks to pass through if needed */
+  
+  --pattern-color: rgba(114, 114, 114, 0.3);
+  background-color: #191a1a;
+  background-image: 
+    linear-gradient(0deg, transparent 24%, var(--pattern-color) 25%, var(--pattern-color) 26%, transparent 27%, transparent 74%, var(--pattern-color) 75%, var(--pattern-color) 76%, transparent 77%, transparent),
+    linear-gradient(90deg, transparent 24%, var(--pattern-color) 25%, var(--pattern-color) 26%, transparent 27%, transparent 74%, var(--pattern-color) 75%, var(--pattern-color) 76%, transparent 77%, transparent);
+  background-size: 55px 55px;
+}

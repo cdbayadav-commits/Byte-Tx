@@ -1,0 +1,211 @@
+/* Dashboard Layout */
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: #050505;
+  color: #fff;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+  width: 280px;
+  background: rgba(10, 10, 10, 0.9);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  padding: 30px 20px;
+  z-index: 10;
+  backdrop-filter: blur(20px);
+}
+
+.brand-logo {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 50px;
+  padding-left: 10px;
+  background: linear-gradient(90deg, #fff, #888);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 15px;
+  border-radius: 12px;
+  color: #666;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  cursor: not-allowed;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-item.active {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: default;
+}
+
+.nav-item:not(.active):hover {
+  background: rgba(255, 255, 255, 0.02);
+  color: #888;
+}
+
+/* Lock Icon overlay for inactive items */
+.nav-item:not(.active)::after {
+  content: '🔒';
+  position: absolute;
+  right: 15px;
+  font-size: 0.7rem;
+  opacity: 0.3;
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  opacity: 0.7;
+}
+
+/* --- Main Content --- */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: radial-gradient(circle at top right, rgba(30,30,30,0.2), transparent 40%);
+}
+
+/* --- Header --- */
+.top-header {
+  height: 80px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  background: rgba(5, 5, 5, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.header-title {
+  font-size: 0.9rem;
+  color: #666;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  background: #00ff88;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00ff88;
+}
+
+.user-profile-mini {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-info {
+  text-align: right;
+}
+
+.user-name-mini {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.user-role {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.user-avatar-mini {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* --- Dashboard Showcase View --- */
+.showcase-area {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+}
+
+.showcase-card {
+  width: 100%;
+  max-width: 900px;
+  background: rgba(15, 15, 15, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 30px;
+  padding: 60px;
+  position: relative;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 50px 100px -30px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+}
+
+.showcase-glow {
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(0, 150, 255, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+.coupon-section {
+  margin-top: 40px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  padding: 30px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.coupon-code {
+  font-family: 'Courier New', monospace;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 4px;
+  margin-top: 10px;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.access-msg {
+  color: #666;
+  margin-top: 15px;
+  font-size: 0.9rem;
+}

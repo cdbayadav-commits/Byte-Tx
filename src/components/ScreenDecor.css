@@ -1,0 +1,122 @@
+.screen-decor {
+  position: fixed;
+  z-index: 5;
+  pointer-events: none;
+  /* Removed mix-blend-mode: overlay as it makes text invisible on dark bg */
+}
+
+/* --- Vertical Sidebars (Left/Right) --- */
+.decor-vertical {
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.decor-left {
+  left: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.1); /* Increased visibility */
+}
+
+.decor-right {
+  right: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.1); /* Increased visibility */
+}
+
+/* --- Horizontal Bars (Top/Bottom) --- */
+.decor-horizontal {
+  left: 60px; /* Offset by sidebars */
+  right: 60px;
+  height: 80px; /* Slightly taller to allow padding */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 80px;
+}
+
+.decor-top {
+  top: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.decor-bottom {
+  bottom: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- Elements --- */
+.decor-line {
+  width: 1px;
+  height: 100px;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.5), transparent);
+  margin: 20px 0;
+}
+
+.decor-line-horizontal {
+  height: 1px;
+  width: 150px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent);
+}
+
+.decor-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  color: rgba(255, 255, 255, 0.7); /* Much brighter text */
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.decor-text-horizontal {
+  color: rgba(255, 255, 255, 0.7); /* Brighter */
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* --- Connectors (Visual Lines pointing inward) --- */
+.connector-line {
+  position: absolute;
+  top: 50%;
+  width: 10vw; /* Reach inward */
+  height: 1px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.15), transparent);
+}
+
+.connector-left {
+  left: 60px; /* Start after sidebar */
+}
+
+.connector-right {
+  right: 60px; /* Start after sidebar */
+  transform: rotate(180deg);
+}
+
+/* --- Crosshairs --- */
+.crosshair {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.ch-tl { top: 60px; left: 60px; border-width: 1px 0 0 1px; }
+.ch-tr { top: 60px; right: 60px; border-width: 1px 1px 0 0; }
+.ch-bl { bottom: 60px; left: 60px; border-width: 0 0 1px 1px; }
+.ch-br { bottom: 60px; right: 60px; border-width: 0 1px 1px 0; }
+
+/* Hide on mobile */
+@media (max-width: 900px) {
+  .screen-decor {
+    display: none;
+  }
+}

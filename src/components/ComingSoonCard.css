@@ -1,0 +1,399 @@
+.card-wrapper {
+  position: relative;
+  /* Use max-width with a high percentage to fill the screen better */
+  width: min(95vw, 1200px); 
+  height: min(85vh, 700px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+}
+
+/* Main Content Card */
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.main-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 10, 0.92); /* Higher opacity for better separation */
+  /* Animated Border using conic gradient on pseudo or border-image (safest is pseudo for rounded corners) */
+  border-radius: 40px;
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.95); /* Deeper shadow */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+/* Subtle border sheen using pseudo element */
+.main-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 40px;
+  padding: 1px; /* Border width */
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.1));
+  -webkit-mask: 
+     linear-gradient(#fff 0 0) content-box, 
+     linear-gradient(#fff 0 0);
+  mask: 
+     linear-gradient(#fff 0 0) content-box, 
+     linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Tech Details */
+.tech-detail {
+  position: absolute;
+  font-family: 'Courier New', monospace; /* Monospace for tech feel */
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 2px;
+  pointer-events: none;
+}
+
+.top-left { top: 25px; left: 30px; }
+.top-right { top: 25px; right: 30px; }
+.bottom-left { bottom: 25px; left: 30px; }
+.bottom-right { bottom: 25px; right: 30px; }
+
+.main-card.shifted {
+  transform: translateX(80px) scale(0.98); /* Less scale down, more shift */
+}
+
+/* Badge */
+.badge-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 20;
+}
+
+.badge {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #fff; /* Pure white for max contrast */
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5); /* Cyan glow against black */
+}
+
+/* Content */
+.content-area {
+  text-align: center;
+  padding: 3rem;
+  z-index: 10;
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem; /* Better vertical spacing */
+}
+
+.title {
+  font-size: clamp(3rem, 6vw, 5rem); /* Responsive font sizing */
+  font-weight: 900;
+  line-height: 1.05;
+  background: linear-gradient(135deg, #ffffff 0%, #b3b3b3 50%, #4a4a4a 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+  letter-spacing: -3px;
+  filter: drop-shadow(0 0 30px rgba(255,255,255,0.1));
+}
+
+.card-description {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: var(--text-main); /* Switched from muted to main for better readability on dark */
+  opacity: 0.9; /* Slight transparency but much brighter than before */
+  margin-bottom: 40px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 400;
+}
+
+/* Action Area */
+.notify-action {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.discord-btn {
+  background: #5865F2; /* Discord Brand Color */
+  color: white;
+  border: none;
+  padding: 16px 40px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 10px 30px rgba(88, 101, 242, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.discord-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.discord-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(88, 101, 242, 0.6);
+  background: #4e5cf4; /* Slightly lighter/brighter */
+}
+
+.discord-btn:hover::before {
+  opacity: 1;
+}
+
+.discord-icon {
+  width: 24px; /* Explicit width for icon */
+  height: auto;
+}
+
+/* Sidebar / About Tab */
+.about-sidebar {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  /* Use fixed positioning relative to wrapper to avoid overlap issues */
+  transform: translateY(-50%) translateX(0); 
+  width: 320px;
+  height: 85%; 
+  background: #0a0a0a;
+  border: 1px solid var(--border-color);
+  border-radius: 30px; 
+  z-index: 5; /* Behind main card */
+  display: flex;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  box-shadow: -20px 0 50px rgba(0,0,0,0.8);
+}
+
+/* 
+   The initial state needs to be tucked behind.
+   We achieve this by translating it to align the "About" text with the edge 
+   but keeping the body hidden behind the main card or off-screen.
+*/
+.about-sidebar {
+  /* Move it to the left so only the trigger sticks out from UNDER the main card if we want that look.
+     OR, we position it flush left of the wrapper. 
+     Let's try pulling it left so it peaks out from behind.
+  */
+  transform: translateY(-50%) translateX(20px); /* Partly hidden behind main card */
+}
+
+/* When active, it slides OUT to the left */
+.about-sidebar.active {
+  transform: translateY(-50%) translateX(-250px); /* Slide out left */
+}
+
+/* Adjust wrapper to account for the slide out so it doesn't clip off screen if centered */
+.card-wrapper {
+  margin-left: 100px; /* Give room for sidebar to pop out */
+}
+
+.about-trigger-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-right: 1px solid var(--border-color);
+  background: linear-gradient(to bottom, rgba(255,255,255,0.01), rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  height: 100%;
+  width: 60px; /* Fixed width for trigger area */
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
+  transition: color 0.3s;
+}
+
+.about-trigger-text:hover {
+  color: white;
+  background: rgba(255,255,255,0.05);
+}
+
+.about-content {
+  padding: 3rem 2rem;
+  padding-right: 70px; /* Space for the trigger on the right */
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity 0.4s ease 0.1s, transform 0.5s ease 0.1s;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.about-sidebar.active .about-content {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.about-content h3 {
+  color: white;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.about-content p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+}
+
+.socials {
+  display: flex;
+  gap: 20px;
+}
+
+.socials span {
+  color: white;
+  font-size: 0.9rem;
+  opacity: 0.4;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: all 0.2s;
+}
+
+.socials span:hover {
+  opacity: 1;
+  border-color: white;
+  background: rgba(255,255,255,0.1);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .card-wrapper {
+    margin-left: 0;
+    width: 90vw;
+    flex-direction: column;
+    height: auto;
+  }
+
+  .main-card {
+    min-height: 500px;
+  }
+  
+  .main-card.shifted {
+    transform: translateY(-80px) scale(0.98); /* Shift UP instead of right */
+  }
+
+  .about-sidebar {
+    position: absolute;
+    width: 95%; /* Make it fit inside wrapper width mostly */
+    height: 300px;
+    top: auto;
+    bottom: 20px; /* Position at bottom */
+    left: 50%;
+    right: auto;
+    
+    /* Reset Transforms */
+    transform: translateX(-50%) translateY(0); 
+    
+    flex-direction: column;
+    z-index: 1; /* Below main card */
+  }
+  
+  /* Initial hidden state for mobile: tucked BEHIND the main card at the bottom */
+  .about-sidebar {
+    transform: translateX(-50%) translateY(-100px); /* Hidden behind */
+  }
+
+  .about-sidebar.active {
+    transform: translateX(-50%) translateY(180px); /* Pop OUT downwards */
+  }
+
+  .about-trigger-text {
+    width: 100%;
+    height: 60px;
+    writing-mode: horizontal-tb;
+    position: absolute;
+    top: 0;
+    right: auto;
+    left: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .about-content {
+    padding-top: 80px; /* Space for top trigger */
+    padding-right: 2rem;
+  }
+}
+
+/* Mobile small */
+@media (max-width: 600px) {
+  .title {
+    font-size: 2.5rem;
+  }
+  
+  .notify-form {
+    flex-direction: column;
+  }
+  
+  .notify-btn {
+    width: 100%;
+  }
+
+  .main-card.shifted {
+    transform: translateY(-120px) scale(0.95);
+  }
+  
+  .about-sidebar.active {
+    transform: translateX(-50%) translateY(220px);
+  }
+}
