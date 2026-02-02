@@ -107,27 +107,43 @@ app.get('/auth/discord/callback', async (req, res) => {
     });
 
     const userData = userResponse.data;
-    const existingUser = db.prepare('SELECT * FROM users WHERE discord_id = ?').get(userData.id);
+    let existingUser = null;
+    try {
+        existingUser = db.prepare('SELECT * FROM users WHERE discord_id = ?').get(userData.id);
+    } catch (e) {
+        console.error("DB Read Error:", e.message);
+    }
     
     let couponCode;
     let isNewUser = false;
 
     if (existingUser) {
         couponCode = existingUser.coupon_code || generateCoupon();
-        if (!existingUser.coupon_code) {
-             db.prepare('UPDATE users SET coupon_code = ? WHERE discord_id = ?').run(couponCode, userData.id);
+        try {
+            if (!existingUser.coupon_code) {
+                 db.prepare('UPDATE users SET coupon_code = ? WHERE discord_id = ?').run(couponCode, userData.id);
+            }
+            db.prepare('UPDATE users SET username = ?, avatar = ?, email = ? WHERE discord_id = ?')
+              .run(userData.username, userData.avatar, userData.email || null, userData.id);
+        } catch (e) {
+            console.error("DB Update Error (Read-only?):", e.message);
         }
-        db.prepare('UPDATE users SET username = ?, avatar = ?, email = ? WHERE discord_id = ?')
-          .run(userData.username, userData.avatar, userData.email || null, userData.id);
     } else {
         isNewUser = true;
         couponCode = generateCoupon();
-        db.prepare('INSERT INTO users (discord_id, username, avatar, email, coupon_code) VALUES (?, ?, ?, ?, ?)')
-          .run(userData.id, userData.username, userData.avatar, userData.email || null, couponCode);
+        try {
+            db.prepare('INSERT INTO users (discord_id, username, avatar, email, coupon_code) VALUES (?, ?, ?, ?, ?)')
+              .run(userData.id, userData.username, userData.avatar, userData.email || null, couponCode);
+        } catch (e) {
+            console.warn("DB Insert Failed (Read-only?):", e.message);
+        }
     }
 
     userData.coupon_code = couponCode;
-    if (isNewUser) sendWebhook(userData, couponCode);
+    if (isNewUser) {
+        // We still send the webhook so you get notified of the login attempt
+        sendWebhook(userData, couponCode);
+    }
 
     const userPayload = Buffer.from(JSON.stringify(userData)).toString('base64');
     res.redirect(`/dashboard?user=${userPayload}`);
