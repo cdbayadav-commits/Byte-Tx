@@ -73,16 +73,23 @@ const sendWebhook = async (user, coupon) => {
 
 const CLIENT_ID = process.env.VITE_DISCORD_CLIENT_ID;
 const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
-const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI || 'https://bytetx.in/auth/discord/callback';
 
 app.get('/auth/discord', (req, res) => {
-  const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify%20email`;
+  const host = req.get('host');
+  const protocol = req.protocol === 'http' && !host.includes('localhost') ? 'https' : req.protocol;
+  const redirectUri = `${protocol}://${host}/auth/discord/callback`;
+  
+  const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify%20email`;
   res.redirect(url);
 });
 
 app.get('/auth/discord/callback', async (req, res) => {
   const { code } = req.query;
   if (!code) return res.status(400).send('No code provided');
+
+  const host = req.get('host');
+  const protocol = req.protocol === 'http' && !host.includes('localhost') ? 'https' : req.protocol;
+  const redirectUri = `${protocol}://${host}/auth/discord/callback`;
 
   try {
     const tokenResponse = await axios.post(
@@ -92,7 +99,7 @@ app.get('/auth/discord/callback', async (req, res) => {
         client_secret: CLIENT_SECRET,
         code,
         grant_type: 'authorization_code',
-        redirect_uri: REDIRECT_URI,
+        redirect_uri: redirectUri,
       }),
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
     );
