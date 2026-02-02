@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 dotenv.config();
 
 const app = express();
+app.set('trust proxy', true);
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // In Vercel, the DB file needs to be handled carefully. 
@@ -75,9 +76,7 @@ const CLIENT_ID = process.env.VITE_DISCORD_CLIENT_ID;
 const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 
 app.get('/auth/discord', (req, res) => {
-  const host = req.get('host');
-  const protocol = req.protocol === 'http' && !host.includes('localhost') ? 'https' : req.protocol;
-  const redirectUri = `${protocol}://${host}/auth/discord/callback`;
+  const redirectUri = `${req.protocol}://${req.get('host')}/auth/discord/callback`;
   
   const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify%20email`;
   res.redirect(url);
@@ -87,9 +86,7 @@ app.get('/auth/discord/callback', async (req, res) => {
   const { code } = req.query;
   if (!code) return res.status(400).send('No code provided');
 
-  const host = req.get('host');
-  const protocol = req.protocol === 'http' && !host.includes('localhost') ? 'https' : req.protocol;
-  const redirectUri = `${protocol}://${host}/auth/discord/callback`;
+  const redirectUri = `${req.protocol}://${req.get('host')}/auth/discord/callback`;
 
   try {
     const tokenResponse = await axios.post(
@@ -136,8 +133,13 @@ app.get('/auth/discord/callback', async (req, res) => {
     res.redirect(`/dashboard?user=${userPayload}`);
 
   } catch (error) {
-    console.error('Discord Auth Error:', error.response?.data || error.message);
-    res.status(500).send('Authentication failed');
+    const errorData = error.response?.data;
+    console.error('Discord Auth Error:', errorData || error.message);
+    res.status(500).json({
+        error: 'Authentication failed',
+        details: errorData || error.message,
+        hint: 'Check if your Discord Redirect URI exactly matches https://bytetx.in/auth/discord/callback'
+    });
   }
 });
 

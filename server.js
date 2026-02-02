@@ -10,6 +10,7 @@ import { randomBytes } from 'crypto';
 dotenv.config();
 
 const app = express();
+app.set('trust proxy', true);
 const db = new Database('users.db');
 const WEBHOOK_URL = 'https://discord.com/api/webhooks/1467061458419318825/V9tnZRXr8Ugr-yvnD3YzN5oe9de8Vc_wen5r34VTGF_uRAWtwyFuDUSX3DFq8rVTkERp';
 
@@ -78,9 +79,7 @@ const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI || 'http://localhost:3000/
 // Routes
 
 app.get('/auth/discord', (req, res) => {
-  const host = req.get('host');
-  const protocol = req.protocol === 'http' && !host.includes('localhost') ? 'https' : req.protocol;
-  const redirectUri = `${protocol}://${host}/auth/discord/callback`;
+  const redirectUri = `${req.protocol}://${req.get('host')}/auth/discord/callback`;
 
   const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify%20email`;
   res.redirect(url);
@@ -90,9 +89,7 @@ app.get('/auth/discord/callback', async (req, res) => {
   const { code } = req.query;
   if (!code) return res.status(400).send('No code provided');
 
-  const host = req.get('host');
-  const protocol = req.protocol === 'http' && !host.includes('localhost') ? 'https' : req.protocol;
-  const redirectUri = `${protocol}://${host}/auth/discord/callback`;
+  const redirectUri = `${req.protocol}://${req.get('host')}/auth/discord/callback`;
 
   try {
     const tokenResponse = await axios.post(
@@ -151,7 +148,7 @@ app.get('/auth/discord/callback', async (req, res) => {
     if (isNewUser) sendWebhook(userData, couponCode);
 
     const userPayload = Buffer.from(JSON.stringify(userData)).toString('base64');
-    res.redirect(`http://localhost:5173/dashboard?user=${userPayload}`);
+    res.redirect(`/dashboard?user=${userPayload}`);
 
   } catch (error) {
     console.error('Discord Auth Error:', error.response?.data || error.message);
